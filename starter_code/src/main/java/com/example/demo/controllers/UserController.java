@@ -29,12 +29,18 @@ public class UserController {
 
 	@GetMapping("/id/{id}")
 	public ResponseEntity<User> findById(@PathVariable Long id) {
+
+		log.info("Start to get userProfile by id: {}!", id);
+
 		return ResponseEntity.of(userRepository.findById(id));
 	}
 	
 	@GetMapping("/{username}")
 	public ResponseEntity<User> findByUserName(@PathVariable String username) {
+
+		log.info("Start to get userProfile by username: {}!", username);
 		User user = userRepository.findByUsername(username);
+
 		return user == null ? ResponseEntity.notFound().build() : ResponseEntity.ok(user);
 	}
 	
@@ -52,7 +58,7 @@ public class UserController {
 
 		if(createUserRequest.getPassword().length()<7 ||
 				!createUserRequest.getPassword().equals(createUserRequest.getConfirmPassword())){
-			log.error("CreateUser request failures!");
+			log.error("Invalid password! CreateUser request failures!");
 
 			return ResponseEntity.badRequest().build();
 		}
@@ -62,5 +68,4 @@ public class UserController {
 
 		return ResponseEntity.ok(user);
 	}
-	
 }
